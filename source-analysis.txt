@@ -1,0 +1,13 @@
+Tên source: Fastshop
+Công nghệ: Java
+File chạy chính: ./net/src/main/resources/application.properties
+Port ứng dụng: 8080
+App cần gì để chạy
+  1. Môi trường runtime: JDK
+  2. Hệ quản trị cơ sở dữ liệu: Microsoft SQL Server
+      Port 1435
+      Tên Fastshop
+  3. Các biến môi trường: 
+    - Thông tin kết nối SQL Server( IP/Host, username)
+    - Tài khoản SMTP gmail
+    - Thông số tích hợp đăng nhập bên thứ 3(Google, Facebook)
