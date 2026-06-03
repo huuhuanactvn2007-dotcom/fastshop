@@ -1,0 +1,30 @@
+services:
+  fastshop-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: fastshop-sqlserver-huan
+    restart: always
+    ports:
+      - "1435:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=HuanActvn2007@
+      - MSSQL_PID=Developer
+    volumes:
+      - mssql_data_huan:/var/opt/mssql
+
+  fastshop-app:
+    image: fastshop-backend-huan:v1
+    build: .
+    container_name: fastshop-app-huan
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - fastshop-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://fastshop-db:1433;databaseName=Fastshop;encrypt=true;trustServerCertificate=true;sslProtocol=TLSv1.2;
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=HuanActvn2007@
+
+volumes:
+  mssql_data_huan:
