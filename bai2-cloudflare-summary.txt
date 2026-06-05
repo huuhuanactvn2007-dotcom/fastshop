@@ -1,0 +1,9 @@
+- Cloudflare là lớp edge ngăn cách giữa user và server 
+- Cloudflare có tác dụng :
++ Phân giải DNS và hoạt động như 1 proxy
++ Hỗ trợ mã hóa chứng chỉ SSL/TLS
++ Cache bộ nhớ giúp giảm thời gian load trang
++ Che origin IP
+- Không nên để lộ IP Origin vì nếu để lộ: 
++Hacker có thể tấn công DDoS vào máy chủ
++Hacker có thể bypass các lớp phòng thủ và khai thác tài nguyên server
