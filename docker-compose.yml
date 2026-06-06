@@ -3,11 +3,11 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: fastshop-sqlserver-huan
     restart: always
-    ports:
-      - "1435:1433"
+   # ports:
+   #   - "1435:1433"
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=HuanActvn2007@
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
       - MSSQL_PID=Developer
     volumes:
       - mssql_data_huan:/var/opt/mssql
@@ -17,14 +17,27 @@ services:
     build: .
     container_name: fastshop-app-huan
     restart: always
-    ports:
-      - "8000:8000"
+   # ports:
+   #   - "8000:8000"
     depends_on:
       - fastshop-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://fastshop-db:1433;databaseName=Fastshop;encrypt=true;trustServerCertificate=true;sslProtocol=TLSv1.2;
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=HuanActvn2007@
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://fastshop-db:1433;databaseName=${DB_NAME};encrypt=true;trustServerCertificate=true;sslProtocol=TLSv1.2;
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
 
+  huan-nginx-proxy:
+    image: nginx:latest
+    container_name: huan_reverse_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - fastshop-app
+ 
 volumes:
   mssql_data_huan:
