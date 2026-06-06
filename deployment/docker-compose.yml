@@ -1,6 +1,6 @@
 services:
   fastshop-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: fastshop-sqlserver-huan
     restart: always
    # ports:
@@ -14,7 +14,9 @@ services:
 
   fastshop-app:
     image: fastshop-backend-huan:v1
-    build: .
+    build:
+      context: ../          
+      dockerfile: Dockerfile
     container_name: fastshop-app-huan
     restart: always
    # ports:
@@ -34,7 +36,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - fastshop-app
