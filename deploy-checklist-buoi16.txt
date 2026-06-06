@@ -1,0 +1,20 @@
+-Kiểm tra source code, code mới
+  + Xác định branch hiện tại: git status hoặc git branch
+  + Xem còn code nào mới để pull về không : git log -n 5 --oneline
+-Build image: 
+  + docker build -t app
+- SSH Server + Chạy lại stack
+  + ssh user@server-ip
+  + cd duan/app
+  + docker compose up -d --remove-orphans
+- Kiểm tra container: 
+  +docker compose ps
+- Kiểm tra log: 
+  +docker compose logs --tail=50 service-app
+  +docker compose logs --tail=50 service-db
+- Kiểm tra response:
+  + curl -I http://localhost:8000
+- Kiểm tra nginx/domain: 
+  + curl -I http://example.com
+  + systemctl status nginx
+  + nginx -t
