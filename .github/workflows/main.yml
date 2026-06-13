@@ -21,17 +21,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 24700
           script: |
-            # 1. Di chuyển vào đúng thư mục dự án trên server của bạn
+            
             cd ~/huan-compose-app/fastshop
             
-            # 2. Kéo source code mới nhất từ GitHub về
+            
             git pull origin main
             
-            # 3. Di chuyển vào thư mục chứa file docker-compose.yml
+            
             cd deployment
             
-            # 4. Hạ các container cũ xuống để giải phóng tài nguyên
+            
             docker compose down
             
-            # 5. Khởi động lại và ép build lại image mới từ code vừa pull
+            
             docker compose up -d --build
