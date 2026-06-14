@@ -1,1 +1,37 @@
+name: Deploy Fastshop Application
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 24700
+          script: |
+            
+            cd ~/huan-compose-app/fastshop
+            
+            
+            git pull origin main
+            
+            
+            cd deployment
+            
+            
+            docker compose down
+            
+            
+            docker compose up -d --build

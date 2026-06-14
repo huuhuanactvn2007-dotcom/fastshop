@@ -1,13 +1,10 @@
 USE [master]
 GO
-/****** Object:  Database [Fastshop]    Script Date: 12/22/2022 2:02:21 PM ******/
-CREATE DATABASE [Fastshop]
- CONTAINMENT = NONE
- ON  PRIMARY 
-( NAME = N'Fastshop', FILENAME = N'D:\3\TTS\db\Fastshop.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
- LOG ON
-( NAME = N'Fastshop_log', FILENAME = N'D:\3\TTS\db\Fastshop_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
+/****** Object:  Database [Fastshop] - Docker/Linux safe version ******/
+IF DB_ID(N'Fastshop') IS NULL
+BEGIN
+    CREATE DATABASE [Fastshop];
+END
 GO
 ALTER DATABASE [Fastshop] SET COMPATIBILITY_LEVEL = 150
 GO
@@ -26,7 +23,7 @@ ALTER DATABASE [Fastshop] SET ANSI_WARNINGS OFF
 GO
 ALTER DATABASE [Fastshop] SET ARITHABORT OFF 
 GO
-ALTER DATABASE [Fastshop] SET AUTO_CLOSE ON 
+ALTER DATABASE [Fastshop] SET AUTO_CLOSE OFF 
 GO
 ALTER DATABASE [Fastshop] SET AUTO_SHRINK OFF 
 GO
