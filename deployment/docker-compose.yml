@@ -3,14 +3,16 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: fastshop-sqlserver-huan
     restart: always
-   # ports:
-   #   - "1435:1433"
+    ports:
+      - "1435:1433"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
       - MSSQL_PID=Developer
     volumes:
-      - mssql_data_huan:/var/opt/mssql
+      - fastshop_db_huan:/var/opt/mssql
+    networks:
+      - fastshop-net
 
   fastshop-app:
     image: fastshop-backend-huan:v1
@@ -19,14 +21,30 @@ services:
       dockerfile: Dockerfile
     container_name: fastshop-app-huan
     restart: always
-   # ports:
-   #   - "8000:8000"
+    ports:
+      - "8002:8000"
     depends_on:
       - fastshop-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:sqlserver://fastshop-db:1433;databaseName=${DB_NAME};encrypt=true;trustServerCertificate=true;sslProtocol=TLSv1.2;
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SERVER_PORT=${SERVER_PORT}
+
+      - SERVER_FORWARD_HEADERS_STRATEGY=FRAMEWORK
+
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      
+      - FACEBOOK_CLIENT_ID=${FACEBOOK_CLIENT_ID}
+      - FACEBOOK_CLIENT_SECRET=${FACEBOOK_CLIENT_SECRET}
+    networks:
+      - fastshop-net
 
   huan-nginx-proxy:
     image: nginx:latest
@@ -40,6 +58,12 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - fastshop-app
+    networks:
+      - fastshop-net
  
+networks:
+  fastshop-net:
+    driver: bridge
+
 volumes:
-  mssql_data_huan:
+  fastshop_db_huan:
