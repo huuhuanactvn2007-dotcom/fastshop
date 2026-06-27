@@ -20,13 +20,11 @@ jobs:
           port: 24700
           script: |
             cd ~/huan-compose-app/fastshop
-
             git pull origin main
-
             cd deployment
-# ít downtime hơn down rồi up lại
+            # ít downtime hơn down rồi up lại
             docker compose up -d --build --remove-orphans
-# dọn image cũ
+            # dọn image cũ
             docker image prune -f
 
       - name: Verify deployment
@@ -38,9 +36,6 @@ jobs:
           port: 24700
           script: |
             cd ~/huan-compose-app/fastshop/deployment
-
             docker compose ps
-
             sleep 5
-
             curl -f http://localhost/ || (docker compose logs --tail=50 && exit 1)
