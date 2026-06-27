@@ -1,5 +1,4 @@
 name: Deploy Fastshop Application
-
 on:
   push:
     branches:
@@ -8,30 +7,40 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Server via SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 24700
           script: |
-            
             cd ~/huan-compose-app/fastshop
-            
-            
+
             git pull origin main
-            
-            
+
             cd deployment
-            
-            
-            docker compose down
-            
-            
-            docker compose up -d --build
+# ít downtime hơn down rồi up lại
+            docker compose up -d --build --remove-orphans
+# dọn image cũ
+            docker image prune -f
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 24700
+          script: |
+            cd ~/huan-compose-app/fastshop/deployment
+
+            docker compose ps
+
+            sleep 5
+
+            curl -f http://localhost/ || (docker compose logs --tail=50 && exit 1)
